@@ -23,7 +23,7 @@ The analysis of average cost to product and usage concluded no correlation betwe
 
 <img width="600" height="325" alt="Product Dashboard" src="https://github.com/user-attachments/assets/b3fb25c3-a7d8-4025-87ea-160d80388231" />
 
-**Figure 1: Dashboard reflecting average cost and usage by Amazon product line, filtered by beginning and end of billing cycle.**
+**Figure 1: Dashboard reflecting average cost and usage by Amazon product line, filtered by beginning and end of billing cycle. **
 
 
 ## Next Steps
