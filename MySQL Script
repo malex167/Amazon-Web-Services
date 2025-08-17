@@ -1,0 +1,87 @@
+# Project to hold everything in
+CREATE DATABASE project;
+USE project;
+
+# Creating Billing, product, usagetable, Invoice, and cost to split up main data set
+CREATE TABLE Billing AS
+SELECT BillingPeriodStartDate, BillingPeriodEndDate, ProductCode, MAX(TotalCost) AS MaxTotalCost
+FROM aws
+GROUP BY ProductCode, BillingPeriodStartDate, BillingPeriodEndDate;
+
+ALTER TABLE Billing
+ADD COLUMN BillingID SERIAL PRIMARY KEY;
+
+CREATE TABLE Product AS
+SELECT ProductCode, ProductName
+FROM aws;
+
+ALTER TABLE Product
+ADD COLUMN ProductID SERIAL PRIMARY KEY;
+
+CREATE TABLE UsageTable AS
+SELECT ProductCode, UsageType, UsageStartDate, UsageEndDate, MAX(UsageQuantity) AS MaxUsage
+FROM aws
+GROUP BY ProductCode, UsageType, UsageStartDate, UsageEndDate;
+
+ALTER TABLE UsageTable
+ADD COLUMN UsageID SERIAL PRIMARY KEY;
+
+CREATE TABLE Cost AS
+SELECT ProductCode, RateID, CurrencyCode, MAX(TotalCost) AS MaxTotalCost
+FROM aws
+GROUP BY ProductCode, RateID, CurrencyCode;
+
+ALTER TABLE Cost
+ADD COLUMN CurrencyCostID SERIAL PRIMARY KEY;
+
+CREATE TABLE Invoice AS
+SELECT B.BillingID, B.ProductCode, B.MaxTotalCost, C.CurrencyCostID
+FROM Billing B
+INNER JOIN Usagetable U ON B.ProductCode = C.ProductCode;
+
+
+SELECT * FROM BillingCost;
+
+# Creating table from product usage
+CREATE TABLE ProductUsage AS
+SELECT P.ProductCode, P.ProductName, U.UsageType, U.UsageStartDate, U.UsageEndDate
+FROM Product P
+LEFT JOIN usagetable U ON P.ProductCode = U.ProductCode;
+
+SELECT * FROM ProductUsage;
+
+SELECT * FROM billingcost;
+
+# Viewing products related to AmazonS3
+SELECT ProductCode, ProductName, UsageType
+FROM ProductUsage
+WHERE ProductCode = "AmazonS3";
+
+
+SELECT * FROM BillingCost;
+
+# Selecting all columns from billing cost where the total cost is greater than 10,000 and the product specifically starts with amazon
+SELECT * FROM BillingCost
+WHERE MaxTotalCost > 10000 AND ProductCode LIKE "Amazon%";
+
+# Selecting the average of total cost from billing and grouping by the product code
+SELECT ProductCode, AVG(MaxTotalCost) AS AverageMaxTotalCost
+FROM BillingCost
+GROUP BY ProductCode;
+
+# Examining product usage where the product code is either AmazonEC2 or AmazonCloudFront
+SELECT * FROM ProductUsage
+WHERE ProductCode IN ("AmazonEC2", "AmazonCloudFront");
+
+
+# Creating a stored procedure for selecting all columns from productusage where the code starts with AWS.
+DELIMITER $$
+USE project $$
+CREATE PROCEDURE `aws` ()
+SELECT * FROM ProductUsage
+WHERE ProductCode LIKE "AWS%";
+END$$
+DELIMITER ;
+
+CALL aws() ;
+
