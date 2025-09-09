@@ -21,7 +21,8 @@ The data set was initially analyzed in MySQL to subdivide the data into smaller 
 
 The analysis of average cost to product and usage concluded no correlation between quantity and cost but did conclude that Amazon RDS Service average the largest cost at $243.47 despite only making up 7% of sales as shown in Figure 1 below. The most frequent selling product was associated with AWS Data Transfer at 51.2% of total sales although the average cost was $1.97. Amazon Simple Queue Service and Amazon Simple Notification Service also were associated with $0.00 cost. From this information gathered, better understanding of product lines would aid in determining why certain services yield no profit although this could be associated with free products to aid in customer satisfaction. Marketing work would serve to increase the higher earning products, such as Amazon RDS Service, to increase total transactions and revenue while a review of earning potential could be conducted on AWS Data Transfer to better maximize profits for this widely used product. 
 
-<img width="502" height="280" alt="Product Dashboard" src="https://github.com/user-attachments/assets/65cde46e-e84e-4299-a06b-32efe652b025" />
+<img width="587" height="329" alt="Product Dashboard" src="https://github.com/user-attachments/assets/7f04a73a-891c-48d9-b4c5-d5118d50da0a" />
+
 
 **Figure 1: Dashboard reflecting average cost and usage by Amazon product line, filtered by beginning and end of billing cycle. **
 
